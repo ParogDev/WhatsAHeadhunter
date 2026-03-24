@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Numerics;
 using ExileCore;
-using ExileCore.PoEMemory.Components;
 using ExileCore.Shared;
+using ExileCore.Shared.Enums;
 using SharpDX;
 using WhatsAHeadhunter.Detection;
 using Vector2N = System.Numerics.Vector2;
@@ -46,12 +46,14 @@ public class WorldOverlay
                 var label = rare.HasShroudWalker ? "SHROUD WALKER" : rare.Name;
                 var textColor = rare.HasShroudWalker ? Color.Red : Color.Yellow;
 
-                graphics.DrawText(
-                    label,
-                    new Vector2N(screenPos.X, screenPos.Y - 30),
-                    textColor,
-                    settings.Overlay.LabelFontSize.Value,
-                    FontAlign.Center);
+                using (graphics.SetTextScale(settings.Overlay.LabelFontSize.Value / 16f))
+                {
+                    graphics.DrawText(
+                        label,
+                        new Vector2N(screenPos.X, screenPos.Y - 30),
+                        textColor,
+                        FontAlign.Center);
+                }
             }
         }
     }

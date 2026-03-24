@@ -11,7 +11,6 @@ public class StolenModGroup
     public float MaxTime { get; set; }
     public int ModCount { get; set; }
     public DateTime AcquiredAt { get; set; }
-    public bool HasShroudWalker { get; set; }
 }
 
 public class StolenModTracker

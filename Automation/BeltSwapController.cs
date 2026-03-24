@@ -55,8 +55,7 @@ public class BeltSwapController
 
         if (mode == BeltSwapMode.KeyPress)
         {
-            var key = settings.BeltSwap.Hotkey.Value;
-            if (key != Keys.None && Input.GetKeyState(key))
+            if (settings.BeltSwap.Hotkey.PressedOnce())
                 shouldTrigger = true;
         }
         else if (mode == BeltSwapMode.Automatic)

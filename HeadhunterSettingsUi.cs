@@ -109,7 +109,6 @@ public sealed class HeadhunterSettingsUi
 
             StatusCard(dl, "!! SHROUD WALKER DETECTED !!", dangerColor,
                 $"Teleports: {detector.TeleportCount} | " +
-                $"Interval: {detector.SmokeMineInterval:F1}s | " +
                 $"Expires: {detector.ShroudWalkerTimeRemaining:F0}s");
 
             // Readiness indicator
@@ -131,7 +130,7 @@ public sealed class HeadhunterSettingsUi
             }
             dl.AddRect(barMin, barMax, Col(0.3f, 0.3f, 0.35f));
 
-            var label = detector.TeleportReady ? "TELEPORT READY" : $"Next teleport: {detector.SmokeMineInterval * (1f - readiness):F1}s";
+            var label = detector.TeleportReady ? "TELEPORT READY" : $"Next teleport: {detector.SmokeMineTimeRemaining:F1}s";
             CenterText(dl, label, (barMin + barMax) * 0.5f, Label);
 
             ImGui.Dummy(new Vector2(0, barH + 4));

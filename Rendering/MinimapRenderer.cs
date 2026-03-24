@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Numerics;
 using ExileCore;
 using ExileCore.Shared;
-using SharpDX;
 using WhatsAHeadhunter.Detection;
 
 namespace WhatsAHeadhunter.Rendering;
@@ -33,14 +32,14 @@ public class MinimapRenderer
             var delta = entityGrid - playerGrid;
 
             graphics.DrawLineInWorld(
-                rare.WorldPos + new Vector3(-size, 0, 0),
-                rare.WorldPos + new Vector3(size, 0, 0),
+                entityGrid + new Vector2(-size, 0),
+                entityGrid + new Vector2(size, 0),
                 2f,
                 color);
 
             graphics.DrawLineInWorld(
-                rare.WorldPos + new Vector3(0, -size, 0),
-                rare.WorldPos + new Vector3(0, size, 0),
+                entityGrid + new Vector2(0, -size),
+                entityGrid + new Vector2(0, size),
                 2f,
                 color);
         }

@@ -1,9 +1,9 @@
 using System;
-using System.Numerics;
 using ExileCore;
 using ExileCore.Shared;
 using SharpDX;
 using WhatsAHeadhunter.Detection;
+using Vector2 = System.Numerics.Vector2;
 
 namespace WhatsAHeadhunter.Rendering;
 
@@ -77,9 +77,11 @@ public class HudRenderer
                     _pulsePhase = 0f;
                 }
 
-                var label = detector.TeleportReady
-                    ? "TELEPORT READY"
-                    : $"Teleport in: {(detector.SmokeMineInterval * (1f - fraction)):F1}s";
+                string label;
+                if (detector.TeleportReady)
+                    label = "TELEPORT READY";
+                else
+                    label = $"Teleport in: {detector.SmokeMineTimeRemaining:F1}s";
 
                 DrawBar(graphics, readyRect, label, fraction,
                     new Color(30, 30, 30, 200), fillColor);
@@ -98,6 +100,7 @@ public class HudRenderer
                     new Color(100, 100, 180));
                 yOffset += h + 2;
             }
+
         }
     }
 
