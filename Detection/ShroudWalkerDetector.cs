@@ -11,6 +11,7 @@ public class ShroudWalkerDetector
     private bool _smokeMineWasActive;
     private bool _firstUpdate = true;
     private int _teleportCount;
+    private float _lockedGroupTimer; // timer snapshot of the group carrying Shroud Walker
 
     public bool IsActive { get; private set; }
     public bool TeleportReady { get; private set; }
@@ -61,7 +62,13 @@ public class ShroudWalkerDetector
         {
             _teleportCount++;
             if (!IsActive)
+            {
                 IsActive = true;
+                // Lock to the stolen mod group that was active just before
+                // the first teleport (newest group timer at detection time)
+                var group = tracker.GetMostRecentGroup();
+                _lockedGroupTimer = group?.Timer ?? 0f;
+            }
         }
         _smokeMineWasActive = smokeMineActive;
 
@@ -83,9 +90,22 @@ public class ShroudWalkerDetector
                 TeleportReady = true;
             }
 
-            // Use the newest stolen mod group timer as expiry
-            var newestGroup = tracker.GetMostRecentGroup();
-            ShroudWalkerTimeRemaining = newestGroup?.Timer ?? 0f;
+            // Find the stolen mod group we locked to at detection time
+            // by matching the closest timer (it counts down each frame)
+            ShroudWalkerTimeRemaining = 0f;
+            float bestDiff = float.MaxValue;
+            foreach (var group in tracker.ActiveGroups)
+            {
+                float diff = Math.Abs(group.Timer - _lockedGroupTimer);
+                if (diff < bestDiff)
+                {
+                    bestDiff = diff;
+                    ShroudWalkerTimeRemaining = group.Timer;
+                }
+            }
+            // Keep our locked timer in sync with the matched group
+            if (ShroudWalkerTimeRemaining > 0f)
+                _lockedGroupTimer = ShroudWalkerTimeRemaining;
 
             if (ShroudWalkerTimeRemaining <= 0f || !tracker.HasStolenMods)
             {
@@ -108,5 +128,6 @@ public class ShroudWalkerDetector
         _smokeMineWasActive = false;
         _firstUpdate = true;
         _teleportCount = 0;
+        _lockedGroupTimer = 0f;
     }
 }
