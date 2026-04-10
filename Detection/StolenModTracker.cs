@@ -55,7 +55,8 @@ public class StolenModTracker
 
             if (b.Name == StolenModsBuffName)
             {
-                stolenTimers.Add(b.Timer);
+                if (!float.IsNaN(b.Timer) && b.Timer >= 0f && b.Timer <= 60f)
+                    stolenTimers.Add(b.Timer);
             }
             else if (CompanionBuffNames.Contains(b.Name))
             {

@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using ExileCore.Shared.Attributes;
 using ExileCore.Shared.Interfaces;
 using ExileCore.Shared.Nodes;
 using SharpDX;
@@ -15,12 +16,14 @@ public class WhatsAHeadhunterSettings : ISettings
     public BeltSwapSettings BeltSwap { get; set; } = new();
 }
 
+[Submenu]
 public class DetectionSettings
 {
     public ToggleNode PreScanMonsters { get; set; } = new(true);
     public ToggleNode TrackSmokeMine { get; set; } = new(true);
 }
 
+[Submenu]
 public class OverlaySettings
 {
     public ToggleNode Enabled { get; set; } = new(true);
@@ -32,6 +35,7 @@ public class OverlaySettings
     public RangeNode<int> LabelFontSize { get; set; } = new(16, 8, 32);
 }
 
+[Submenu]
 public class MinimapSettings
 {
     public ToggleNode Enabled { get; set; } = new(true);
@@ -39,6 +43,7 @@ public class MinimapSettings
     public RangeNode<float> IconSize { get; set; } = new(8f, 2f, 20f);
 }
 
+[Submenu]
 public class HudSettings
 {
     public ToggleNode Enabled { get; set; } = new(true);
@@ -51,6 +56,7 @@ public class HudSettings
     public ToggleNode ShowExpiryTimer { get; set; } = new(true);
 }
 
+[Submenu]
 public class BeltSwapSettings
 {
     public RangeNode<int> Mode { get; set; } = new(1, 0, 2);
