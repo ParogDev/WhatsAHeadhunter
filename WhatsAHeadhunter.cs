@@ -22,6 +22,8 @@ public class WhatsAHeadhunter : BaseSettingsPlugin<WhatsAHeadhunterSettings>
     private HeadhunterSettingsUi _settingsUi = null!;
 
     private readonly Dictionary<uint, TrackedRare> _trackedRares = new();
+    private readonly List<uint> _capturedRareIds = new(4);
+    private const string CapturedBuffName = "capture_monster_trapped";
 
     // Cached per-frame data for Render
     private bool _canRender;
@@ -131,17 +133,40 @@ public class WhatsAHeadhunter : BaseSettingsPlugin<WhatsAHeadhunterSettings>
         // Update belt swap automation
         _beltSwap.Update(GameController, Settings, _detector);
 
-        // Update tracked rare positions
+        // Update tracked rare positions and detect captured beasts
+        _capturedRareIds.Clear();
         foreach (var kvp in _trackedRares)
         {
             var rare = kvp.Value;
             if (!rare.IsValid) continue;
+
+            // Check if Einhar captured this beast
+            var buffs = rare.Entity.GetComponent<Buffs>()?.BuffsList;
+            if (buffs != null)
+            {
+                for (int i = 0; i < buffs.Count; i++)
+                {
+                    if (buffs[i]?.Name == CapturedBuffName)
+                    {
+                        _capturedRareIds.Add(kvp.Key);
+                        goto nextRare;
+                    }
+                }
+            }
+
             var render = rare.Entity.GetComponent<Render>();
             if (render != null)
             {
                 rare.GridPos = rare.Entity.GridPosNum;
                 rare.WorldPos = render.PosNum;
             }
+            nextRare:;
+        }
+
+        // Remove captured beasts from tracking
+        for (int i = 0; i < _capturedRareIds.Count; i++)
+        {
+            _trackedRares.Remove(_capturedRareIds[i]);
         }
 
         _canRender = true;
