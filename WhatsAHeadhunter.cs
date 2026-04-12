@@ -73,16 +73,10 @@ public class WhatsAHeadhunter : BaseSettingsPlugin<WhatsAHeadhunterSettings>
                 }
             }
 
-            // Skip already-captured beasts (e.g. after HUD restart)
-            var buffs = entity.GetComponent<Buffs>()?.BuffsList;
-            if (buffs != null)
-            {
-                for (int i = 0; i < buffs.Count; i++)
-                {
-                    if (buffs[i]?.Name == CapturedBuffName)
-                        return;
-                }
-            }
+            // Skip capturable beasts -- Einhar captures don't grant stolen mods
+            var stats = entity.GetComponent<Stats>();
+            if (stats?.StatDictionary?.TryGetValue(GameStat.IsCapturableMonster, out var capVal) == true && capVal > 0)
+                return;
 
             if (hasShroudWalker || Settings.Overlay.ShowAllRares.Value)
             {
