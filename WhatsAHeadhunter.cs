@@ -73,6 +73,17 @@ public class WhatsAHeadhunter : BaseSettingsPlugin<WhatsAHeadhunterSettings>
                 }
             }
 
+            // Skip already-captured beasts (e.g. after HUD restart)
+            var buffs = entity.GetComponent<Buffs>()?.BuffsList;
+            if (buffs != null)
+            {
+                for (int i = 0; i < buffs.Count; i++)
+                {
+                    if (buffs[i]?.Name == CapturedBuffName)
+                        return;
+                }
+            }
+
             if (hasShroudWalker || Settings.Overlay.ShowAllRares.Value)
             {
                 var render = entity.GetComponent<Render>();
