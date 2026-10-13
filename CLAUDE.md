@@ -834,7 +834,6 @@ Study other plugins in `Plugins/Source/` for pattern reference. Look at:
 |-------|---------|------|---------|
 | Enable | Enable | ToggleNode | true |
 | Detection | PreScanMonsters | ToggleNode | true |
-| Detection | TrackSmokeMine | ToggleNode | true |
 | Overlay | Enabled | ToggleNode | true |
 | Overlay | ShowAllRares | ToggleNode | false |
 | Overlay | ShroudWalkerColor | ColorNode | (255,50,50,180) |
