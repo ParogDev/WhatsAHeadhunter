@@ -39,7 +39,8 @@ public class DetectionSettings
     [Menu("Pre-scan Monster Mods", "Scan rare monsters for the Shroud Walker mod before you kill them (needed for the world and minimap markers)")]
     public ToggleNode PreScanMonsters { get; set; } = new(true);
 
-    [Menu("Track Smoke Mine Cooldown", "Reserved for teleport readiness from smoke mine buff timing; not read by the plugin yet")]
+    [MenuReadOnly("Reserved: not read by the plugin yet")]
+    [Menu("Track Smoke Mine Cooldown","Reserved for teleport readiness from smoke mine buff timing; not read by the plugin yet")]
     public ToggleNode TrackSmokeMine { get; set; } = new(true);
 }
 

@@ -16,7 +16,6 @@ public sealed class HeadhunterSettingsUi
     private WhatsAHeadhunterSettings? _settings;
     private StolenModTracker? _tracker;
     private ShroudWalkerDetector? _detector;
-    private float _pulsePhase;
 
     // Gold/amber palette for the Headhunter theme
     private static readonly Vector4 Accent = new(1f, 0.75f, 0.2f, 1f);
@@ -52,7 +51,9 @@ public sealed class HeadhunterSettingsUi
         var detector = _detector;
         if (tracker == null || detector == null)
         {
-            SettingsMenu.Dim("Status: the plugin passed no tracker/detector (not initialised yet)");
+            SettingsMenu.Text(DangerRed, "Status: DrawSettings passed "
+                + (tracker == null ? "no StolenModTracker" : "no ShroudWalkerDetector")
+                + " (Initialise did not create it), so live status can't be shown");
             return;
         }
         var dl = ImGui.GetWindowDrawList();
@@ -77,15 +78,13 @@ public sealed class HeadhunterSettingsUi
 
         if (detector.IsActive)
         {
-            _pulsePhase += 0.02f;
-            var pulse = (float)(Math.Sin(_pulsePhase * Math.PI * 2) * 0.3 + 0.7);
+            var pulse = (float)(Math.Sin(ImGui.GetTime() * Math.PI * 2 * 1.2) * 0.3 + 0.7);   // 1.2 Hz, frame-rate independent
             StatusCard(dl, "!! SHROUD WALKER DETECTED !!", new Vector4(0.9f * pulse, 0.15f, 0.15f, 1f),
                 $"Teleports: {detector.TeleportCount} | Expires: {detector.ShroudWalkerTimeRemaining:F0}s");
             ReadinessBar(dl, detector);
         }
         else
         {
-            _pulsePhase = 0f;
             StatusCard(dl, "Shroud Walker: Not Detected", SafeGreen, "Safe to play");
         }
         ImGui.Spacing();
@@ -155,8 +154,14 @@ public sealed class HeadhunterSettingsUi
 
     private void DrawBeltSwapStatus()
     {
-        if (_settings == null || _detector == null) return;
-        var mode = (BeltSwapMode)_settings.BeltSwap.Mode.Value;
+        if (_settings == null || _detector == null)
+        {
+            SettingsMenu.Text(DangerRed, "Swap status: DrawSettings passed no "
+                + (_settings == null ? "settings" : "ShroudWalkerDetector"));
+            return;
+        }
+        // clamped like the combo, so the badge and the combo always agree on the mode
+        var mode = (BeltSwapMode)Math.Clamp(_settings.BeltSwap.Mode.Value, 0, ModeNames.Length - 1);
         var canSwap = _detector.IsActive && mode != BeltSwapMode.Disabled;
         _menu.Badge(canSwap ? "Ready to swap" : "Inactive (no Shroud Walker or disabled)", canSwap ? SafeGreen : Muted);
     }
