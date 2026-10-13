@@ -6,20 +6,26 @@ using SharpDX;
 
 namespace WhatsAHeadhunter;
 
+// Drawn by SettingsMenu (see SettingsMenu.cs and HeadhunterSettingsUi.cs): [Menu] gives the label and the description,
+// [MenuTab] puts a submenu on a named tab, [MenuUnit] suffixes a slider's readout, parentIndex hangs a row under another.
 public class WhatsAHeadhunterSettings : ISettings
 {
     [Menu("Enable", "Turn the whole plugin on or off")]
     public ToggleNode Enable { get; set; } = new(true);
 
+    [MenuTab("Status")]
     [Menu("Detection", "How Shroud Walker rares are detected")]
     public DetectionSettings Detection { get; set; } = new();
 
+    [MenuTab("Overlay")]
     [Menu("World Overlay", "Circles and labels drawn on rare monsters in the world")]
     public OverlaySettings Overlay { get; set; } = new();
 
+    [MenuTab("Overlay")]
     [Menu("Minimap", "Shroud Walker markers on the minimap / large map")]
     public MinimapSettings Minimap { get; set; } = new();
 
+    [MenuTab("HUD")]
     [Menu("Status HUD", "On-screen bars for stolen mods, teleport readiness and Shroud Walker expiry")]
     public HudSettings Hud { get; set; } = new();
 
@@ -52,13 +58,15 @@ public class OverlaySettings
     [Menu("Other Rare Color", "Circle color for other rares (only drawn with Show All Rares)")]
     public ColorNode OtherRareColor { get; set; } = new(new Color(255, 200, 50, 120));
 
+    [MenuUnit("units")]
     [Menu("Circle Radius", "Radius of the world circle, in world units (20-200)")]
     public RangeNode<int> CircleRadius { get; set; } = new(60, 20, 200);
 
-    [Menu("Text Labels", "Show the mod name above marked rares")]
+    [Menu("Text Labels", "Show the mod name above marked rares", 1)]
     public ToggleNode ShowLabel { get; set; } = new(true);
 
-    [Menu("Label Font Size", "Label text size in px (8-32, 16 = normal)")]
+    [MenuUnit("px")]
+    [Menu("Label Font Size", "Label text size in px (8-32, 16 = normal)", 2, 1)]
     public RangeNode<int> LabelFontSize { get; set; } = new(16, 8, 32);
 }
 
@@ -71,6 +79,7 @@ public class MinimapSettings
     [Menu("Icon Color", "Color of the Shroud Walker map cross")]
     public ColorNode ShroudWalkerColor { get; set; } = new(new Color(255, 50, 50));
 
+    [MenuUnit("grid")]
     [Menu("Icon Size", "Half-length of each cross arm, in grid units (2-20)")]
     public RangeNode<float> IconSize { get; set; } = new(8f, 2f, 20f);
 }
@@ -81,15 +90,19 @@ public class HudSettings
     [Menu("Enable HUD", "Show the status bars on screen")]
     public ToggleNode Enabled { get; set; } = new(true);
 
+    [MenuUnit("px")]
     [Menu("Position X", "Left edge of the HUD, in screen px")]
     public RangeNode<int> X { get; set; } = new(500, 0, 3840);
 
+    [MenuUnit("px")]
     [Menu("Position Y", "Top edge of the HUD, in screen px")]
     public RangeNode<int> Y { get; set; } = new(36, 0, 2160);
 
+    [MenuUnit("px")]
     [Menu("Bar Width", "Width of each bar, in px (50-600)")]
     public RangeNode<int> BarWidth { get; set; } = new(220, 50, 600);
 
+    [MenuUnit("px")]
     [Menu("Bar Height", "Height of each bar, in px (10-60)")]
     public RangeNode<int> BarHeight { get; set; } = new(22, 10, 60);
 
@@ -106,15 +119,18 @@ public class HudSettings
 [Submenu]
 public class BeltSwapSettings
 {
+    // drawn as a named combo by HeadhunterSettingsUi (SettingsMenu.Custom "BeltSwap.Mode")
     [Menu("Mode", "0 = Disabled, 1 = Key Press (swap on hotkey), 2 = Automatic (swap as soon as Shroud Walker is active)")]
     public RangeNode<int> Mode { get; set; } = new(1, 0, 2);
 
     [Menu("Hotkey", "Key that triggers a belt swap in Key Press mode")]
     public HotkeyNodeV2 Hotkey { get; set; } = new(Keys.None);
 
+    [MenuUnit("ms")]
     [Menu("Swap Cooldown", "Minimum time between swap attempts, in ms (500-5000)")]
     public RangeNode<int> SwapCooldownMs { get; set; } = new(1000, 500, 5000);
 
+    [MenuUnit("ms")]
     [Menu("Click Delay", "Pause between inventory clicks during a swap, in ms (20-200)")]
     public RangeNode<int> ClickDelayMs { get; set; } = new(50, 20, 200);
 }

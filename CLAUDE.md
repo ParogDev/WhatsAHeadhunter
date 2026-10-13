@@ -12,7 +12,8 @@ This plugin monitors HeadHunter unique belt effects in Path of Exile. It tracks 
 |------|---------|
 | `WhatsAHeadhunter.cs` | Main plugin -- lifecycle, entity tracking, wiring |
 | `WhatsAHeadhunterSettings.cs` | All settings (6 submenu groups) |
-| `HeadhunterSettingsUi.cs` | Custom ImGui settings UI (5 tabs, gold theme) |
+| `HeadhunterSettingsUi.cs` | Builds the `SettingsMenu` (gold accent; tabs Status / Overlay / HUD / Belt Swap) and adds what it can't know: live Status cards, the Belt Swap mode combo, swap readiness |
+| `SettingsMenu.cs` | The [Menu]-driven settings renderer (per-plugin copy of the scaffolding's `new-plugin/templates/SettingsMenu.template.cs`, `__HUD__` = ExileCore): tabs from [Submenu]/[MenuTab], cards, rows, filter, right-click reset |
 | `Detection/StolenModTracker.cs` | Groups stolen_mods_buff by kill timer |
 | `Detection/ShroudWalkerDetector.cs` | Smoke mine buff detection state machine |
 | `Detection/TrackedRare.cs` | Entity data model for tracked rares |
