@@ -1,6 +1,6 @@
 using System;
 using System.Numerics;
-using ImGuiNET;
+using Hexa.NET.ImGui;
 using WhatsAHeadhunter.Automation;
 using WhatsAHeadhunter.Detection;
 
