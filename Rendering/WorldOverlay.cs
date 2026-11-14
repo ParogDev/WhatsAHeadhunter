@@ -11,6 +11,16 @@ namespace WhatsAHeadhunter.Rendering;
 
 public class WorldOverlay
 {
+    /// <summary>
+    /// The size the HUD draws text at (CoreSettings font size; DrawText scales from it), so LabelFontSize stays in pixels.
+    /// 16 when the setting can't be read.
+    /// </summary>
+    private static float HudFontSize(GameController gc)
+    {
+        var size = gc.Settings?.CoreSettings?.FontSettings?.FontSize?.Value ?? 0;
+        return size > 0 ? size : 16f;
+    }
+
     public void Render(
         Graphics graphics,
         GameController gc,
@@ -46,7 +56,7 @@ public class WorldOverlay
                 var label = rare.HasShroudWalker ? "SHROUD WALKER" : rare.Name;
                 var textColor = rare.HasShroudWalker ? Color.Red : Color.Yellow;
 
-                using (graphics.SetTextScale(settings.Overlay.LabelFontSize.Value / 16f))
+                using (graphics.SetTextScale(settings.Overlay.LabelFontSize.Value / HudFontSize(gc)))
                 {
                     graphics.DrawText(
                         label,
